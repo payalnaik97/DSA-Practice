@@ -1,0 +1,171 @@
+package com.dsa.practice;
+
+import java.util.NoSuchElementException;
+
+public class DoublyLinkedList {
+	private ListNode head;
+	private ListNode tail;
+	private int length;
+
+	private class ListNode{
+		private int data;
+		ListNode next;
+		ListNode previous;
+
+		public ListNode(int data){
+			this.data=data;
+		}
+
+	}
+
+	public DoublyLinkedList(){
+		this.head=null;
+		this.tail=null;
+		length=0;
+	}
+
+	public boolean isEmpty(){
+		return length==0; //head=null
+	}
+
+	public int length() {
+		return length;
+	}
+
+	public void displayForward() {
+		if(head==null)
+			return;
+
+		ListNode temp=head;
+		while(temp!=null) 
+		{
+			System.out.print(temp.data+"-->");
+			temp=temp.next;
+		}
+		System.out.print("null");
+
+	}
+
+	public void displayBackward() {
+		if(tail==null)
+			return;
+
+		ListNode temp=tail;
+		while(temp!=null) 
+		{
+			System.out.print(temp.data+"-->");
+			temp=temp.previous;
+		}
+		System.out.print("null");
+
+	}
+
+	public void insertNodeAtStart(int nodeValue) {
+		ListNode newNode=new ListNode(nodeValue);
+		if(isEmpty())
+			tail=newNode;
+		else
+			head.previous=newNode;
+
+		newNode.next=head;
+		head=newNode;
+		length++;
+	}
+
+	public void insertNodeAtLast(int nodeValue) {
+		ListNode newNode=new ListNode(nodeValue);
+		if(isEmpty()) 
+			head=newNode;		
+		else
+			tail.next=newNode;
+
+		newNode.previous=tail;
+		tail=newNode;
+		length++;
+	}
+
+	public ListNode deleteFirstNode(){
+		if(isEmpty()) {
+			System.out.println("Doubly Linked List is Empty");
+			throw new NoSuchElementException();
+		}
+		ListNode temp=head;
+		if(head==tail)
+			tail=null; 
+
+		else 		
+			head.next.previous=null;
+
+		head=head.next;
+		temp.next=null;
+		return temp;  //return deleted node
+
+	} 
+
+	public ListNode deleteLastNode(){
+		if(isEmpty()) {
+			System.out.println("Doubly Linked List is Empty");
+			throw new NoSuchElementException();
+		}
+		ListNode temp=tail;
+		if(head==tail)
+			head=null; 	   
+		else 		
+			tail.previous.next=null;
+
+		tail=tail.previous;
+		temp.previous=null;
+		return temp;  //return deleted node
+
+	} 
+
+
+	public static void main(String[] args) {
+		DoublyLinkedList dll=new DoublyLinkedList();
+		try{
+	    //try to delete node from empty list --throws exception 		
+//		dll.deleteFirstNode();
+//		dll.deleteFirstNode();
+		//insert node at end of doubly linked list
+		dll.insertNodeAtLast(7);
+		dll.insertNodeAtLast(8);
+		dll.insertNodeAtLast(9);
+		dll.insertNodeAtLast(10);
+		dll.insertNodeAtLast(11);
+		System.out.println("Displyed List in Forward Direction");
+		dll.displayForward();
+		System.out.println("\n");
+		System.out.println("Displyed List in Backward Direction");
+		dll.displayBackward();
+
+		//to insert node at start of doubly linked list
+		dll.insertNodeAtStart(2);
+		dll.insertNodeAtStart(1);
+		System.out.println("\n");
+		System.out.println("Displyed List in Forward Direction");
+		dll.displayForward();
+		System.out.println("\n");
+		System.out.println("Displyed List in Backward Direction");
+		dll.displayBackward();
+
+		//to delete first node from list
+//		System.out.println("\n");
+//		dll.displayForward();
+//		System.out.println("\nFirst node Deleted node from list -->"+dll.deleteFirstNode().data);
+//		System.out.println("First node Deleted node from list -->"+dll.deleteFirstNode().data);		
+//		dll.displayForward();
+
+		//to delete first node from list
+		System.out.println("\n");
+		dll.displayForward();
+		System.out.println("\nFirst node Deleted node from list -->"+dll.deleteLastNode().data);
+		System.out.println("First node Deleted node from list -->"+dll.deleteLastNode().data);		
+		dll.displayForward();
+
+	
+	}
+	catch(Exception e) {
+		System.out.println("**************You Have Passed Wrong Information***************");
+	}
+}
+}
