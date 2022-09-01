@@ -1,0 +1,550 @@
+package com.dsa.practice;
+
+public class SingleLinkedList {
+	private  ListNode head;
+	public static class ListNode
+	{
+		private int data;
+		private ListNode next;
+
+		public ListNode(int data)
+		{
+			this.data=data;
+			this.next=null;
+		}
+	}	
+
+	public int displayedList() {
+		ListNode current=head;
+		int count=0;
+		if(head==null) {
+			return 0;	
+		}
+		while(current != null) {
+			System.out.print(current.data +" ---> ");
+			count++;
+			current=current.next;
+
+		}
+		System.out.println("null");
+		return count;
+	}
+
+	public void insertNodeAtFirst(int nodeValue) 
+	{
+		ListNode newNode=new ListNode(nodeValue);
+		newNode.next=head;
+		head=newNode;
+
+	}
+
+	public void insertNodeAtEnd(int nodeValue)
+	{
+		ListNode newNode=new ListNode(nodeValue);
+		if(head == null) {
+			head=newNode;
+			return;
+		}
+		ListNode current=head;
+		while(current.next!=null) {
+			current=current.next;
+		}
+		current.next=newNode;
+
+	}
+
+	public void insertNodeAtGivenPosition(int nodeValue , int position)
+	{
+		ListNode newNode=new ListNode(nodeValue);
+		if(position == 1)
+		{
+			newNode.next=head;
+			head=newNode;
+		}
+		else 
+		{
+			int count=1;
+			ListNode previous=head;
+			while(count < position-1) {
+				previous=previous.next;
+				count++;
+			} 
+			ListNode current=previous.next;
+			newNode.next=current;
+			previous.next=newNode;
+		}	
+
+	}
+
+	public ListNode deleteFirstNode() {
+		if(head==null) {
+			return null;
+		}
+
+		ListNode temp=head;
+		head=head.next;
+		temp.next=null;
+		return temp;		
+	}
+
+	public ListNode deleteLastNode() {
+		if(head==null || head.next==null) {
+			return head;
+		}
+
+		ListNode current=head;
+		ListNode previous=null;
+		while(current.next != null){
+			previous=current;
+			current=current.next;
+		}
+		previous.next=null;
+
+		return current;	
+	}
+
+	public ListNode deleteNodeAtGivenPosition(int position) throws Exception{	
+		try {
+			if(position==0 || position > displayedList()) {
+				System.out.println("Please pass correct position");
+				return null;
+			}
+		}
+		catch(Exception e){			
+		}	
+		if(position==1) {
+			ListNode current=head;
+			head=head.next;
+			return current;
+		}
+		else {
+			int count=1;
+			ListNode current=head;
+			ListNode previous=null;
+			while(count < position) {
+				previous=current;
+				current=current.next;
+				count++;
+			}
+			previous.next=current.next;	
+			return current;
+		}
+	}
+
+	public void deleteNodeByKey(int nodeToDelete) {
+		ListNode current=head;
+		ListNode temp=null;
+		if(current !=null && current.data ==nodeToDelete) {
+			head=current.next;
+			return;
+		}
+		while(current !=null && current.data!=nodeToDelete) {
+			temp=current;
+			current=current.next;
+		}
+		if(current==null) {
+			System.out.println("\n"+nodeToDelete+" is not present in single linked list");
+			return;
+		}
+		temp.next=current.next;
+
+	}
+
+	public boolean serachNode(int searchNode) {
+		ListNode current=head;
+		if(current==null) {
+			System.out.println("List is Empty");
+			return false;
+		}
+		int count=1;
+		while(current!=null) {
+			if(current.data == searchNode) {
+				System.out.println("SearchNode found in list @location"+count);
+				return true;
+			}
+			count++;
+			current=current.next;		
+		}
+		return false;
+
+
+	}
+
+	public void reverseSingleLinkedList() {
+		if(head==null) {
+			System.out.println("No element present in list");;
+		}
+		ListNode current=head;
+		ListNode previous=null;
+		ListNode next=null;
+		while(current !=null)
+		{
+			next=current.next;    
+			current.next=previous;
+			previous=current;
+			current=next;
+		}
+		//to print reverse list
+		while(previous != null) {
+			System.out.print(previous.data +" --> ");		
+			previous=previous.next;
+		}
+		System.out.println("null");
+
+	}
+
+	public ListNode middleNodeInList() {
+		if(head==null) {
+			return null;
+		}	
+		ListNode slowPtr=head;
+		ListNode fastPtr=head;
+		while(fastPtr!=null && fastPtr.next != null) {
+			slowPtr=slowPtr.next;
+			fastPtr=fastPtr.next.next;
+		}
+		return slowPtr;
+	}
+
+	public ListNode nthNodeFromEndofList(int positionFromLast) {
+		ListNode mainPtr=head;
+		ListNode refPtr=head;    
+		if(head==null)
+			return null;
+		if(positionFromLast<=0)
+			throw new IllegalArgumentException("Invalid positionFromLast passed-->"+positionFromLast);
+
+		int count=1;
+		while(count <= positionFromLast) {
+			if(refPtr == null) {
+				throw new IllegalArgumentException(positionFromLast + " is greater than number of nodes in list");
+			}
+			refPtr=refPtr.next;
+			count++;
+		}
+		while(refPtr != null) {
+			mainPtr=mainPtr.next;
+			refPtr=refPtr.next;
+		}  
+		return mainPtr;
+	}   	
+
+	public void removeDuplicateFromSortedList() {
+		if(head == null)
+			return;
+		ListNode current=head;
+		while(current!=null && current.next!=null) {
+			if(current.data == current.next.data)
+				current.next=current.next.next;
+			else
+				current=current.next;
+		}
+	}
+
+	public ListNode insertNodetoSortedLinkedList(int nodeValue) {
+		ListNode newNode=new ListNode(nodeValue);
+		if(head==null)
+			return newNode;
+		ListNode current=head;
+		ListNode temp=null;
+
+		while(current != null && current.data  < newNode.data) {
+			temp=current;
+			current=current.next;
+		}
+		if(current != null && current.data >= nodeValue) {
+			newNode.next=current;
+			head=newNode;
+			return head; 
+		}
+
+		newNode.next=current;
+		temp.next=newNode;	
+		return head;
+	}
+
+	public boolean verifyListContainsLoop() {
+		ListNode fastPtr=head;
+		ListNode slowPtr=head;
+		while(fastPtr!=null && fastPtr.next!=null)
+		{
+			fastPtr=fastPtr.next.next;
+			slowPtr=slowPtr.next;
+			if(slowPtr==fastPtr) 
+			{
+				System.out.println("Loop Starting point is  "+getStartingPointOfLoop(slowPtr).data); 
+				return true;
+			}
+		}
+		return false;	
+	}
+
+	private ListNode getStartingPointOfLoop(ListNode slowPtr) {
+		ListNode temp=head;
+		while(slowPtr != temp)
+		{
+			temp=temp.next;
+			slowPtr=slowPtr.next;
+		}
+		return temp;		
+
+	}	
+
+	public boolean removeLoopFromList() {
+		ListNode fastPtr=head;
+		ListNode slowPtr=head;
+		while(fastPtr!=null && fastPtr.next!=null)
+		{
+			fastPtr=fastPtr.next.next;
+			slowPtr=slowPtr.next;
+			if(slowPtr==fastPtr) 
+			{
+				removeLoop(slowPtr);
+				return true;
+			}
+		}
+		return false;	
+	}
+
+	private void removeLoop(ListNode slowPtr) {
+		ListNode temp=head;
+		ListNode previous=slowPtr;
+
+		// This Code also worked just taking another new pointer previous
+		//		while(slowPtr != temp)
+		//		{
+		//			temp=temp.next;
+		//			slowPtr=slowPtr.next;
+		//			previous=previous.next;
+		//		}	
+		//		previous.next=null;
+
+		while(slowPtr.next != temp.next)
+		{
+			temp=temp.next;
+			slowPtr=slowPtr.next;				
+		}
+		slowPtr.next=null;
+
+	}
+
+	 public void createLoopLinkedList() {
+			ListNode  first=new ListNode(1);
+			ListNode  second=new ListNode(2);
+			ListNode  third=new ListNode(3);
+			ListNode  fourth=new ListNode(4);
+			ListNode fifth=new ListNode(5);
+			ListNode sixth=new ListNode(6);
+			head=first;
+			first.next=second;
+			second.next=third;
+			third.next=fourth;
+			fourth.next=fifth;
+			fifth.next=sixth;
+			sixth.next=third;		
+		}
+
+	
+	public static ListNode mergeTwoSortedSingleLinkedList(ListNode a, ListNode b) {
+		ListNode dummy = new ListNode(0);
+		ListNode tail=dummy;
+		while(a!=null && b!=null)
+		{
+			if(a.data <= b.data) 
+			{
+			   tail.next=a;
+			   a=a.next;
+			  
+			}
+			else
+			{
+				tail.next=b;
+				b=b.next;
+				 
+			}
+			tail=tail.next;
+		}
+		if(a==null)
+		{
+			tail.next=b;
+		}
+		else
+		{
+			tail.next=a;
+		}
+     	
+		return dummy.next;    	
+	}
+
+	public static ListNode toAddListInReverse(ListNode a, ListNode b) {
+		ListNode dummy=new ListNode(0);
+		ListNode tail=dummy;
+		int carry=0;
+		while(a!=null || b!=null) {
+		int x=(a!=null) ? a.data:0;	
+		int y=(b!=null) ? b.data:0;	
+		int sum=carry+x+y;
+		carry=sum/10;
+		tail.next=new ListNode(sum % 10);
+		tail=tail.next;
+		if(a!=null) a=a.next;
+		if(b!=null) b=b.next;
+		}
+		
+		if(carry > 0) {
+			tail.next=new ListNode(carry);
+		}
+		return dummy.next;    	
+	}
+
+
+	public static void main(String[] args) throws Exception {
+		try {
+//			System.out.println("****************************************************************************************"+ "\n");		
+//			SingleLinkedList sll =new SingleLinkedList();
+//			sll.head=new ListNode(10);
+//			ListNode second=new ListNode(10);
+//			ListNode third=new ListNode(30);
+//			ListNode fourth=new ListNode(30);	
+//
+//			//Now connect node to form chain
+//			sll.head.next=second;
+//			second.next=third;	
+//			third.next=fourth;
+//
+//			//to add node at beginning of list
+//			sll.insertNodeAtFirst(40);
+//			sll.insertNodeAtFirst(40);		
+//
+//
+//			//to add node at end of list
+//			sll.insertNodeAtEnd(80);
+//			sll.insertNodeAtEnd(80);
+//
+//			//to add node at given position
+//			sll.insertNodeAtGivenPosition(0, 1);
+//			sll.insertNodeAtGivenPosition(70, 5);
+//			sll.insertNodeAtGivenPosition(1, 11); //at end of list
+//
+//			System.out.println("Length of linked list is--> "+ sll.displayedList());
+//
+//			//to find middle node in list odd node or even node list
+//			System.out.println("\nMiddle Node in list is--> "+sll.middleNodeInList().data);
+//
+//			//to find nth node from end of list
+//			System.out.println("\nnth Node in list from last is--> "+sll.nthNodeFromEndofList(10).data);
+//
+//			//to delete first node
+//			System.out.println("\nDeleted node  "+sll.deleteFirstNode().data);
+//			System.out.println("Length after deleting first node  "+sll.displayedList());
+//
+//			//to delete last node
+//			System.out.println("\nDeleted node  "+sll.deleteLastNode().data);
+//			System.out.println("Length after deleting last node  "+sll.displayedList());
+//
+//			//to delete last node
+//			System.out.println("\nDeleted node  "+sll.deleteNodeAtGivenPosition(3).data);
+//			System.out.println("Length after deleting last node  "+sll.displayedList());
+//
+//			//to delete node with key
+//			sll.deleteNodeByKey(1555);
+//			System.out.println("Length after deleting node by key  "+sll.displayedList());
+//
+//			//to serach node in single linked list
+//			if(sll.serachNode(90)) 
+//				System.out.println("\nSerch node found in list");			
+//			else
+//				System.out.println("\nSerch node not found in list");
+//
+//			//reverse singled linked list
+//			sll.reverseSingleLinkedList();
+//
+//
+//			//to remove duplicated from sorted linked list
+//			System.out.println("\n" +"****************************************************************************************"+ "\n");		
+//			SingleLinkedList ssll =new SingleLinkedList();
+//			ssll.head=new ListNode(5);
+//			ssll.insertNodeAtFirst(5);
+//			ssll.insertNodeAtFirst(4);
+//			ssll.insertNodeAtFirst(4);
+//			ssll.insertNodeAtFirst(4);
+//			ssll.insertNodeAtFirst(3);
+//			ssll.insertNodeAtFirst(3);
+//			ssll.insertNodeAtFirst(2);
+//			ssll.insertNodeAtFirst(2);
+//			ssll.insertNodeAtFirst(1);
+//			ssll.insertNodeAtFirst(1);
+//			System.out.println("List before remove Duplicates.."+ssll.displayedList());
+//			ssll.removeDuplicateFromSortedList();
+//			System.out.println("List After remove Duplicates.."+ssll.displayedList());
+//			System.out.println();
+//
+//			//to insert new node in sorted single linked list
+//			ssll.insertNodetoSortedLinkedList(0);
+//			System.out.println("List After inserted node in sorted linked list "+ssll.displayedList());
+//
+//			System.out.println("****************************************************************************************"+ "\n");
+//
+//			//to detect loop in linked list and starting node point of list
+//			/* 1->2->3->4
+//			         	 |  |   
+//			             6<-5   
+//			 */  
+//			SingleLinkedList sllloop =new SingleLinkedList();
+//			sllloop.createLoopLinkedList();			
+//
+//			if(sllloop.verifyListContainsLoop()) 
+//				System.out.println("Singled linked list contains loop");			
+//			else
+//				System.out.println("Singled linked list does not contains loop");
+//
+//			//to remove loop
+//			sllloop.removeLoopFromList();
+//			if(sllloop.verifyListContainsLoop()) 
+//				System.out.println("After remove loop: Singled linked list contains loop");			
+//			else
+//				System.out.println("After remove loop: Singled linked list does not contains loop");
+//			
+			//to merge two sorted single linked list
+			SingleLinkedList sll1 =new SingleLinkedList();		
+			sll1.insertNodeAtEnd(5);
+			sll1.insertNodeAtEnd(8);
+			sll1.insertNodeAtEnd(9);
+			
+			SingleLinkedList sll2 =new SingleLinkedList();		
+			sll2.insertNodeAtEnd(3);
+			sll2.insertNodeAtEnd(4);
+			sll2.insertNodeAtEnd(6);
+			
+			System.out.println("Before Merge two list are");
+            System.out.println("Sorted List a.."+sll1.displayedList());
+            System.out.println();
+            System.out.println("Sorted List b.."+sll2.displayedList());
+            
+			SingleLinkedList result =new SingleLinkedList();
+			result.head=mergeTwoSortedSingleLinkedList(sll1.head, sll2.head);
+			System.out.println();
+			System.out.println("After Merge two sorted single list \n"+result.displayedList());
+			
+			/*The digits are stored in reverse order, and each of their nodes contains a single digit.
+			Add the two numbers and return the sum as a linked list. 
+			You may assume the two numbers do not contain any leading zero, except the number 0 itself.*/
+			SingleLinkedList addresult =new SingleLinkedList();
+			addresult.head=toAddListInReverse(sll1.head, sll2.head);
+			System.out.println("After addition two  single list in reverse \n"+addresult.displayedList());
+			System.out.println("Addition of list");
+		    addresult.reverseSingleLinkedList();
+			
+			
+		}
+		
+
+		catch(Exception e){
+			System.out.println(e);
+			System.out.println("**********************You have passed incorrect information***********************");
+		}
+	}
+
+}
+
+
